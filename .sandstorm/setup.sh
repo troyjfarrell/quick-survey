@@ -1,18 +1,18 @@
 #!/bin/bash
 
-# Install a C++ compiler so that when 'npm build' tries to build the 'fibers' package,
-# it can do so.
-export DEBIAN_FRONTEND=noninteractive
-apt-get update
-apt-get install -y build-essential
+# When you change this file, you must take manual action. Read this doc:
+# - https://docs.sandstorm.io/en/latest/vagrant-spk/customizing/#setupsh
 
 set -euo pipefail
 
 CURL_OPTS="--silent --show-error"
+apt-get update
+apt-get install -y build-essential git
 
 cd /opt/
 
-PACKAGE=meteor-spk-0.3.0
+NODE_ENV=production
+PACKAGE=meteor-spk-0.4.1
 PACKAGE_FILENAME="$PACKAGE.tar.xz"
 CACHE_TARGET="/host-dot-sandstorm/caches/${PACKAGE_FILENAME}"
 
@@ -39,7 +39,7 @@ cp -a /lib/x86_64-linux-gnu/libtinfo.so.* /opt/meteor-spk/meteor-spk.deps/lib/x8
 # Unfortunately, Meteor does not explicitly make it easy to cache packages, but
 # we know experimentally that the package is mostly directly extractable to a
 # user's $HOME/.meteor directory.
-METEOR_RELEASE=1.4.1.2
+METEOR_RELEASE=1.6.1.1
 METEOR_PLATFORM=os.linux.x86_64
 METEOR_TARBALL_FILENAME="meteor-bootstrap-${METEOR_PLATFORM}.tar.gz"
 METEOR_TARBALL_URL="https://d3sqy0vbqsdhku.cloudfront.net/packages-bootstrap/${METEOR_RELEASE}/${METEOR_TARBALL_FILENAME}"
@@ -58,6 +58,7 @@ cd /home/vagrant/
 su -c "tar xf '${METEOR_CACHE_TARGET}'" vagrant
 # Link into global PATH
 if [ ! -e /usr/bin/meteor ] ; then ln -s /home/vagrant/.meteor/meteor /usr/bin/meteor ; fi
+chown vagrant:vagrant /home/vagrant -R
 
 ### Download & compile capnproto and the Sandstorm getPublicId helper.
 
@@ -67,7 +68,7 @@ if [ ! -e /usr/bin/meteor ] ; then ln -s /home/vagrant/.meteor/meteor /usr/bin/m
 if [ ! -e /usr/local/bin/capnp ] ; then
     sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -q clang autoconf pkg-config libtool git
     cd /tmp
-    if [ ! -e capnproto ]; then git clone https://github.com/sandstorm-io/capnproto; fi
+    if [ ! -e capnproto ]; then git clone https://github.com/capnproto/capnproto; fi
     cd capnproto
     git checkout master
     cd c++
@@ -84,4 +85,3 @@ if [ ! -e /opt/app/sandstorm-integration/getPublicId ] ; then
     make
 fi
 ### All done.
-

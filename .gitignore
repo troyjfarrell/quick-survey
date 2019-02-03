@@ -1,4 +1,5 @@
 .meteor/local
+.sandstorm/.vagrant
 packages
 var/www
 sandstorm-integration/tmp/*

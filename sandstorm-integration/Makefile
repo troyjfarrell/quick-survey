@@ -1,10 +1,10 @@
 # You may override the following vars on the command line to suit
 # your config.
-CXX=clang++
+#CXX=clang++
 CXXFLAGS=-O2 -Wall
 
 # You generally should not modify these.
-CXXFLAGS2=-std=c++1y -Itmp $(CXXFLAGS)
+CXXFLAGS2=-std=c++14 -Itmp $(CXXFLAGS)
 
 .PHONY: all clean
 
