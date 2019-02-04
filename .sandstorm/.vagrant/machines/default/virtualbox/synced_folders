@@ -1,1 +1,0 @@
-{"virtualbox":{"/opt/app":{"guestpath":"/opt/app","hostpath":"/home/troy/quick-survey","disabled":false,"__vagrantfile":true},"/host-dot-sandstorm":{"guestpath":"/host-dot-sandstorm","hostpath":"/home/troy/.sandstorm","disabled":false,"__vagrantfile":true}}}
